@@ -39,8 +39,9 @@ particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 
 // Material
 const particlesMaterial = new THREE.PointsMaterial({
     alphaMap: particleTexture,
-    alphaTest: 0.001,
+    // alphaTest: 0.001,
     color: '#ff88cc',
+    depthTest: false,
     size: 0.1,
     sizeAttenuation: true,
     transparent: true
@@ -49,6 +50,13 @@ const particlesMaterial = new THREE.PointsMaterial({
 // Points
 const particles = new THREE.Points(particlesGeometry, particlesMaterial)
 scene.add(particles)
+
+// Cube
+const cube = new THREE.Mesh(
+    new THREE.BoxGeometry(),
+    new THREE.MeshBasicMaterial()
+)
+scene.add(cube)
 
 /**
  * Sizes
