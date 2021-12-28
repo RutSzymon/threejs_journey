@@ -40,6 +40,7 @@ particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 
 const particlesMaterial = new THREE.PointsMaterial({
     alphaMap: particleTexture,
     // alphaTest: 0.001,
+    blending: THREE.AdditiveBlending,
     color: '#ff88cc',
     // depthTest: false,
     depthWrite: false,
