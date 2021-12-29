@@ -1,6 +1,7 @@
 import './style.css'
 import * as THREE from 'three'
 import * as dat from 'lil-gui'
+import gsap from 'gsap'
 
 /**
  * Debug
@@ -150,9 +151,27 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  * Scroll
  */
 let scrollY = window.scrollY
+let currentSection = 0
 
 window.addEventListener('scroll', () => {
     scrollY = window.scrollY
+
+    const newSection = Math.round(scrollY / sizes.height)
+
+    if (newSection != currentSection) {
+        currentSection = newSection
+
+        gsap.to(
+            sectionMeshes[currentSection].rotation,
+            {
+                duration: 1.5,
+                ease: 'power2.inOut',
+                x: '+=6',
+                y: '+=3',
+                z: '+=1.5'
+            }
+        )
+    }
 })
 
 /**
@@ -176,7 +195,7 @@ let previousTime = 0
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
-    const deltaTIme = elapsedTime - previousTime
+    const deltaTime = elapsedTime - previousTime
     previousTime = elapsedTime
 
     // Animate camera
@@ -184,13 +203,13 @@ const tick = () =>
 
     const parallaxX = cursor.x * 0.5
     const parallaxY = - cursor.y * 0.5
-    cameraGroup.position.x += (parallaxX - cameraGroup.position.x) * 5 * deltaTIme
-    cameraGroup.position.y += (parallaxY - cameraGroup.position.y) * 5 * deltaTIme
+    cameraGroup.position.x += (parallaxX - cameraGroup.position.x) * 5 * deltaTime
+    cameraGroup.position.y += (parallaxY - cameraGroup.position.y) * 5 * deltaTime
 
     // Animate meshes
     for(const mesh of sectionMeshes){
-        mesh.rotation.x = elapsedTime * 0.1
-        mesh.rotation.y = elapsedTime * 0.12
+        mesh.rotation.x += deltaTime * 0.1
+        mesh.rotation.y += deltaTime * 0.12
     }
 
     // Render
