@@ -22,8 +22,15 @@ const scene = new THREE.Scene()
 const gltfLoader = new GLTFLoader()
 
 gltfLoader.load(
-    '/models/Duck/glTF-Embedded/Duck.gltf',
-    (gltf) => { scene.add(gltf.scene.children[0]) }
+    '/models/FlightHelmet/glTF/FlightHelmet.gltf',
+    (gltf) => {
+        // const children = [...gltf.scene.children]
+        // for(const child of children){
+        //     scene.add(child)
+        // }
+
+        scene.add(gltf.scene)
+    }
 )
 
 /**
