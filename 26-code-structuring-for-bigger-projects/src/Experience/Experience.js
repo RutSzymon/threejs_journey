@@ -10,5 +10,13 @@ export default class Experience {
 
     // Setup
     this.sizes = new Sizes()
+
+    this.sizes.on('resize', () => {
+      this.resize()
+    })
+  }
+
+  resize() {
+    console.log('A resize occured')
   }
 }
