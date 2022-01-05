@@ -1,7 +1,39 @@
-import { oneThing, anotherThing } from './test.js'
+class Robot {
+    constructor(name, legs) {
+        this.name = name
+        this.legs = legs
 
-console.log(oneThing)
-anotherThing()
+        console.log(`I am ${this.name}. Thank you creator`)
+    }
+
+    sayHi() {
+        console.log(`Hello! My name is ${this.name}`)
+    }
+}
+
+class FlyingRobot extends Robot {
+    constructor(name, legs) {
+        super(name, legs)
+
+        super.sayHi()
+    }
+
+    sayHi() {
+        console.log(`Hello! My name is ${this.name} and I am a flying robot`)
+    }
+
+    takeOff() {
+        console.log(`Have a good flight ${this.name}`)
+    }
+
+    land() {
+        console.log(`Welcome back ${this.name}`)
+    }
+}
+
+const wallE = new Robot('Wall-E', 0)
+const ultron = new FlyingRobot('Ultron', 2)
+const astroBoy = new FlyingRobot('Astro Boy', 2)
 
 // import './style.css'
 // import * as THREE from 'three'
