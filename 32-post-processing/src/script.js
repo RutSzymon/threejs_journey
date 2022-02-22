@@ -10,6 +10,7 @@ import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass.js'
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
 import { RGBShiftShader } from 'three/examples/jsm/shaders/RGBShiftShader.js'
 import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader.js'
+import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js'
 
 /**
  * Base
@@ -147,7 +148,28 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 /**
  * Post processing
  */
-const effectComposer = new EffectComposer(renderer)
+// Render target
+let RenderTargetClass = null
+
+if (renderer.getPixelRatio() === 1 && renderer.capabilities.isWebGL2) {
+    RenderTargetClass = THREE.WebGLMultisampleRenderTarget
+    console.log('Using WebGLMultisampleRenderTartget')
+} else {
+    RenderTargetClass = THREE.WebGLRenderTarget
+    console.log('Using WebGLRenderTarget')
+}
+
+const renderTarget = new RenderTargetClass(
+    800,
+    600,
+    {
+        minFilter: THREE.LinearFilter,
+        magFilter: THREE.LinearFilter,
+        format: THREE.RGBAFormat
+    }
+)
+
+const effectComposer = new EffectComposer(renderer, renderTarget)
 effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 effectComposer.setSize(sizes.width, sizes.height)
 
@@ -163,7 +185,7 @@ effectComposer.addPass(dotScreenPass)
 // Glitch pass
 const glitchPass = new GlitchPass()
 glitchPass.goWild = false
-glitchPass.enabled = true
+glitchPass.enabled = false
 effectComposer.addPass(glitchPass)
 
 // RGB Shift pass
@@ -173,7 +195,17 @@ effectComposer.addPass(rgbShiftPass)
 
 // Gamma Correction pass
 const gammaCorrectionShader = new ShaderPass(GammaCorrectionShader)
+gammaCorrectionShader.enabled = true
 effectComposer.addPass(gammaCorrectionShader)
+
+// SMAA pass
+if (renderer.getPixelRatio() === 1 && !renderer.capabilities.isWebGL2) {
+    const smaaPass = new SMAAPass()
+    smaaPass.enabled = true
+    effectComposer.addPass(smaaPass)
+
+    console.log('Using SMAA')
+}
 
 /**
  * Animate
