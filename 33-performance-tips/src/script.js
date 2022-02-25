@@ -1,6 +1,14 @@
 import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import Stats from 'stats.js'
+
+/**
+ * Stats
+ */
+const stats = new Stats()
+stats.showPanel(0)
+document.body.appendChild(stats.dom)
 
 /**
  * Base
@@ -122,6 +130,8 @@ const clock = new THREE.Clock()
 
 const tick = () =>
 {
+    stats.begin()
+
     const elapsedTime = clock.getElapsedTime()
 
     // Update test mesh
@@ -135,6 +145,8 @@ const tick = () =>
 
     // Call tick again on the next frame
     window.requestAnimationFrame(tick)
+
+    stats.end()
 }
 
 tick()
@@ -185,7 +197,7 @@ tick()
 //     const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5)
 
 //     const material = new THREE.MeshNormalMaterial()
-    
+
 //     const mesh = new THREE.Mesh(geometry, material)
 //     mesh.position.x = (Math.random() - 0.5) * 10
 //     mesh.position.y = (Math.random() - 0.5) * 10
@@ -202,7 +214,7 @@ tick()
 //     const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5)
 
 //     const material = new THREE.MeshNormalMaterial()
-    
+
 //     const mesh = new THREE.Mesh(geometry, material)
 //     mesh.position.x = (Math.random() - 0.5) * 10
 //     mesh.position.y = (Math.random() - 0.5) * 10
@@ -215,7 +227,7 @@ tick()
 
 // // Tip 20
 // const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5)
-    
+
 // for(let i = 0; i < 50; i++)
 // {
 //     const material = new THREE.MeshNormalMaterial()
@@ -234,7 +246,7 @@ tick()
 // const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5)
 
 // const material = new THREE.MeshNormalMaterial()
-    
+
 // for(let i = 0; i < 50; i++)
 // {
 //     const mesh = new THREE.Mesh(geometry, material)
