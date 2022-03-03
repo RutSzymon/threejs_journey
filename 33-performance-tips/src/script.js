@@ -295,12 +295,14 @@ const shaderMaterial = new THREE.ShaderMaterial({
     precision: 'lowp',
     uniforms:
     {
-        uDisplacementTexture: { value: displacementTexture },
-        uDisplacementStrength: { value: 1.5 }
+        uDisplacementTexture: { value: displacementTexture }
+    },
+    defines: {
+        DISPLACEMENT_STRENGTH: 1.5
     },
     vertexShader: `
+        // #define DISPLACEMENT_STRENGTH 1.5;
         uniform sampler2D uDisplacementTexture;
-        uniform float uDisplacementStrength;
 
         varying vec2 vUv;
 
@@ -310,7 +312,7 @@ const shaderMaterial = new THREE.ShaderMaterial({
 
             float elevation = texture2D(uDisplacementTexture, uv).r;
 
-            modelPosition.y += max(elevation, 0.5) * uDisplacementStrength;
+            modelPosition.y += max(elevation, 0.5) * DISPLACEMENT_STRENGTH;
 
             gl_Position = projectionMatrix * viewMatrix * modelPosition;
 
