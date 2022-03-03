@@ -304,36 +304,31 @@ const shaderMaterial = new THREE.ShaderMaterial({
         // #define DISPLACEMENT_STRENGTH 1.5;
         uniform sampler2D uDisplacementTexture;
 
-        varying vec2 vUv;
+        varying vec3 vColor;
 
         void main()
         {
+            // Position
             vec4 modelPosition = modelMatrix * vec4(position, 1.0);
-
             float elevation = texture2D(uDisplacementTexture, uv).r;
-
             modelPosition.y += max(elevation, 0.5) * DISPLACEMENT_STRENGTH;
-
             gl_Position = projectionMatrix * viewMatrix * modelPosition;
 
-            vUv = uv;
+            // Color
+            float colorElevation = max(elevation, 0.25);
+            vec3 color = mix(vec3(1.0, 0.1, 0.1), vec3(0.1, 0.0, 0.5), colorElevation);
+
+            vColor = color;
         }
     `,
     fragmentShader: `
         uniform sampler2D uDisplacementTexture;
 
-        varying vec2 vUv;
+        varying vec3 vColor;
 
         void main()
         {
-            float elevation = texture2D(uDisplacementTexture, vUv).r;
-            elevation = max(elevation, 0.25);
-
-            vec3 depthColor = vec3(1.0, 0.1, 0.1);
-            vec3 surfaceColor = vec3(0.1, 0.0, 0.5);
-            vec3 finalColor = mix(depthColor, surfaceColor, elevation);
-
-            gl_FragColor = vec4(finalColor, 1.0);
+            gl_FragColor = vec4(vColor, 1.0);
         }
     `
 })
